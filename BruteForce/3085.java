@@ -2,89 +2,100 @@ import java.util.*;
 
 public class Main {
 
-    public static int check(char[][] input){
-        int n = input.length;
-        int answer = 1;
+    public static int check(char[][] board){
+        int count;
+        int result = 0;
+        int length = board.length;
 
-        for(int i = 0; i < n; i++){
-            int count = 1;
-
-            for(int j = 1; j < n; j++){
-                if(input[i][j] == input[i][j-1])
-                    count+=1;
-                else
-                    count = 1;
-                if(answer < count)
-                    answer = count;
-            }
+        // 행과 열을 한번에 다 훑는 코드.
+        for(int i = 0; i < length; i++){
             count = 1;
-            for(int j = 1; j < n; j++){
-                if(input[j][i] == input[j-1][i])
-                    count+=1;
+            // 행 확인
+            for(int j = 1; j < length; j++){
+                if(board[i][j] == board[i][j-1])
+                    count++;
                 else
                     count = 1;
-                if(answer < count)
-                    answer = count;
+                if(count > result)
+                    result = count;
+            }
+
+            count = 1;
+            // 열 확인
+            for(int j = 1; j < length; j++){
+                if(board[j][i] == board[j-1][i])
+                    count++;
+                else
+                    count = 1;
+                if(count > result)
+                    result = count;
             }
         }
-        return answer;
+
+        return result;
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        int n = sc.nextInt();
+        int N = sc.nextInt();
 
-        char[][] input = new char[n][n];
+        char[][] board = new char[N][N];
+        int result = 0;
 
-        for(int i = 0; i < n ; i++){
-            String tmp = sc.next();
-            for(int j = 0; j < n; j++){
-                input[i][j] = tmp.charAt(j);
+        // 입력
+        for(int i = 0; i < N; i++){
+            String input = sc.next();
+            for(int j = 0; j < N; j++){
+                board[i][j] = input.charAt(j);
             }
         }
 
-        char temp;
-        int result = 0;
-        for(int i = 0; i < n; i++){
-            for(int j = 0; j < n; j++){
-                if(j+1 < n){
-                    // swap
-                    temp = input[i][j];
-                    input[i][j] = input[i][j+1];
-                    input[i][j+1] = temp;
+        char tmp;
+        int count = 0;
+        for(int i = 0 ; i < N ; i++){
+            for(int j = 0; j < N; j++){
 
-                    // check
-                    int check = check(input);
-                    if(result < check)
-                        result = check;
+                // 오른쪽이랑 교환
+                if(j+1 < N){
+                    // 교환
+                    tmp =  board[i][j];
+                    board[i][j] = board[i][j+1];
+                    board[i][j+1] = tmp;
 
-                    // swap ( 원상복귀 )
-                    temp = input[i][j];
-                    input[i][j] = input[i][j+1];
-                    input[i][j+1] = temp;
+                    // 체크
+                    count = check(board);
+                    if(count > result)
+                        result = count;
+
+                    // 다시 되돌리기
+                    tmp =  board[i][j];
+                    board[i][j] = board[i][j+1];
+                    board[i][j+1] = tmp;
                 }
 
-                if(i+1 < n){
-                    // swap
-                    temp = input[i][j];
-                    input[i][j] = input[i+1][j];
-                    input[i+1][j] = temp;
+                // 아래쪽이랑 교환
+                if(i+1 < N){
+                    // 교환
+                    tmp = board[i][j];
+                    board[i][j] = board[i+1][j];
+                    board[i+1][j] = tmp;
 
-                    // check
-                    int check = check(input);
-                    if(result < check)
-                        result = check;
+                    // 체크
+                    count = check(board);
+                    if(count > result)
+                        result = count;
 
-                    // swap ( 원상 복귀 )
-                    temp = input[i][j];
-                    input[i][j] = input[i+1][j];
-                    input[i+1][j] = temp;
+                    // 다시 되돌리기
+                    tmp = board[i][j];
+                    board[i][j] = board[i+1][j];
+                    board[i+1][j] = tmp;
                 }
             }
         }
 
         System.out.println(result);
+
         sc.close();
     }
 }
