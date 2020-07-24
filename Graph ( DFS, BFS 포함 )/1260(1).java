@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-// 인접리스트를 사용한 풀이
+// 인접 리스트 사용한 풀이
 public class Main {
 
     static int V; // node
