@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-class Pair {
+class Pair { 
     int x;
     int y;
 
